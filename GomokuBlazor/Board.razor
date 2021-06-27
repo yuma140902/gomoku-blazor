@@ -1,0 +1,82 @@
+﻿<div id="game" class="item">
+  <StatusBox Turn="@status.Turn" IsFinished="@status.IsFinished" Winner="@status.Winner" />
+  <div id="goban">
+    @for (int i = 0; i < BoardModel.COLUMNS; ++i)
+    {
+      <div class="board-row">
+        @for (int j = 0; j < BoardModel.ROWS; ++j)
+        {
+          var point = new Vector(i, j);
+          <div class="cell-wrapper">
+            <div class="cell" @onclick="e => HandleCellClick(point)">
+              <StoneSvg Stone="@status.Cells[point]" />
+            </div>
+          </div>
+        }
+      </div>
+    }
+  </div>
+  <button @onclick=Restart>RESTART</button>
+</div>
+
+@code {
+
+  private GameStatus status = new GameStatus();
+
+  private void Restart()
+  {
+    this.status = new GameStatus();
+  }
+
+  private void HandleCellClick(Vector point)
+  {
+    if (this.status.IsFinished || this.status.Cells[point] != null) return;
+
+    this.status.Cells[point] = this.status.Turn;
+
+    if (IsPlayerWinner(point, this.status.Turn))
+    {
+      this.status.IsFinished = true;
+      this.status.Winner = this.status.Turn;
+    }
+    this.status.Turn = Player.Toggle(this.status.Turn);
+  }
+
+  private bool IsPlayerWinner(Vector point, EnumPlayer player)
+  {
+    var orig = point.Clone();
+    var directions = new Vector[] {
+      new Vector(1, 0),
+      new Vector(0, 1),
+      new Vector(1, 1),
+      new Vector(1, -1)
+    };
+    bool has_won = false;
+    foreach (var direction in directions)
+    {
+      int count = 1;
+
+      var p = orig + direction;
+      while (this.status.Cells[p] == player)
+      {
+        p += direction;
+        ++count;
+      }
+
+      p = orig - direction;
+      while (this.status.Cells[p] == player)
+      {
+        p -= direction;
+        ++count;
+      }
+
+      if (count >= 5)
+      {
+        has_won = true;
+        break;
+      };
+    }
+
+    return has_won;
+  }
+}

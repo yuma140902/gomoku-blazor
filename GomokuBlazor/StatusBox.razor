@@ -1,0 +1,21 @@
+﻿<div>
+  @if (!IsFinished)
+  {
+    <p>次は<div class="inline-stone"><StoneSvg Stone=@Turn /></div>の手番です</p>
+  }
+  else
+  {
+    <p><div class="inline-stone"><StoneSvg Stone=@Winner /></div>が勝ちました</p>
+  }
+</div>
+
+@code {
+  [Parameter]
+  public EnumPlayer Turn { get; set; }
+
+  [Parameter]
+  public bool IsFinished { get; set; }
+
+  [Parameter]
+  public EnumPlayer? Winner { get; set; }
+}

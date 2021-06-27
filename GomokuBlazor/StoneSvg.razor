@@ -1,0 +1,17 @@
+﻿@if (Stone == EnumPlayer.Black)
+{
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+    <circle cx="50" cy="50" r="30" fill="black" stroke="black" stroke-width="5"></circle>
+  </svg>
+}
+else if (Stone == EnumPlayer.White)
+{
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+    <circle cx="50" cy="50" r="30" fill="white" stroke="black" stroke-width="5"></circle>
+  </svg>
+}
+
+@code {
+  [Parameter]
+  public EnumPlayer? Stone { get; set; }
+}
